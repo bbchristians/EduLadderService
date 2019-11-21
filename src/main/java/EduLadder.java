@@ -16,7 +16,7 @@ public class EduLadder {
 	}
 	
 	public Question getQuestion(String sessionId, int gradeLevel) {
-		return null;
+		return new Question("123123", "5 + 5 = ?", new String[] { "10", "ten" }, "");
 	}
 
 	public List<Question> getRankableQuestions() {
