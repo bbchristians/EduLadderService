@@ -6,17 +6,26 @@ import spark.Response;
 
 import static spark.Spark.*;
 
+import java.sql.SQLException;
+
 public class Main {
 
     //http://localhost:4567/hello
 
-    private static EduLadder controller = new EduLadder();
+    private static EduLadder controller = null;
 
     public static void main(String[] args) {
-        get("/getRankableQuestions", Main::getRankableQuestions);
-        post("/getQuestion", Main::getQuestion);
-        post("/submitRankings", Main::submitRankings);
-        post("/submitAnswer", Main::submitAnswer);
+    	try {
+			controller = new EduLadder();
+		
+	        get("/getRankableQuestions", Main::getRankableQuestions);
+	        post("/getQuestion", Main::getQuestion);
+	        post("/submitRankings", Main::submitRankings);
+	        post("/submitAnswer", Main::submitAnswer);
+    	} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     private static String getQuestion(Request req, Response res) {
