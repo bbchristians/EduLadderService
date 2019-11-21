@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
     	try {
 			controller = new EduLadder();
-		
+
 	        get("/getRankableQuestions", Main::getRankableQuestions);
 	        post("/getQuestion", Main::getQuestion);
 	        post("/submitRankings", Main::submitRankings);
