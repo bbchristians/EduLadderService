@@ -3,7 +3,7 @@
 
 public class EduLadder {
 	
-	public Question getQuestion(int sessionId, int gradeLevel) {
+	public Question getQuestion(String sessionId, int gradeLevel) {
 		return null;
 	}
 	
