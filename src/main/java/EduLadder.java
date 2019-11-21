@@ -23,7 +23,7 @@ public class EduLadder {
 		return null;
 	}
 	
-	public void answerQuestion(int sessionId, String questionId, String answer) {
+	public void answerQuestion(String sessionId, String questionId, String answer) {
 
 	}
 
