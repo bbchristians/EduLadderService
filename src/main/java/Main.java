@@ -1,6 +1,8 @@
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import requests.GetQuestionRequest;
+import responses.GetQuestionResponse;
+import responses.GetRankableQuestionsResponse;
+import responses.Question;
 import spark.Filter;
 import spark.Request;
 import spark.Response;
@@ -13,11 +15,12 @@ public class Main {
 
     //http://localhost:4567/getRankableQuestions
 
-    private static EduLadder controller = null;
+    private static EduLadderController controller = null;
+    private static Gson gson = new Gson();
 
     public static void main(String[] args) {
     	try {
-			controller = new EduLadder();
+			controller = new EduLadderController();
 
             after((Filter) (request, response) -> {
                 response.header("Access-Control-Allow-Origin", "*");
@@ -35,15 +38,29 @@ public class Main {
     }
 
     private static String getQuestion(Request req, Response res) {
-        Gson gson = new Gson();
         GetQuestionRequest reqBody = gson.fromJson(req.body(), GetQuestionRequest.class);
-        res.status(200);
-        res.body(gson.toJson(controller.getQuestion(reqBody.sessionId, reqBody.gradeLevel)));
-        return gson.toJson(controller.getQuestion(reqBody.sessionId, reqBody.gradeLevel));
+        res.body(
+                gson.toJson(
+                        new GetQuestionResponse(
+                                controller.getQuestion(
+                                        reqBody.sessionId, reqBody.gradeLevel
+                                )
+                        )
+                )
+        );
+        return "";
     }
 
-    private static String getRankableQuestions(Request req, Response res) {
-        return "TODO";
+    private static String getRankableQuestions(Request req, Response res) throws InterruptedException {
+        Question[] questions = controller.getRankableQuestions();
+        res.body(
+                gson.toJson(
+                        new GetRankableQuestionsResponse(
+                                questions[0], questions[1]
+                        )
+                )
+        );
+        return "";
     }
 
     private static String submitRankings(Request req, Response res) {
