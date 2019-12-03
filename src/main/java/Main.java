@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 public class Main {
 
-    //http://localhost:4567/getRankableQuestions
+    // http://localhost:4567/
 
     private static EduLadderController controller = null;
     private static Gson gson = new Gson();
