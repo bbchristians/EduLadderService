@@ -38,7 +38,7 @@ public class EduLadderController {
 				this.flushingModel.addReward(sessionId, correctQuestions.size() + incorrectQuestions.size());
 			}
 			return this.huntingModel
-					.getBestAppropriateQuestion(sessionId, gradeLevel, correctQuestions, incorrectQuestions)
+					.getNextQuestion(sessionId, gradeLevel, correctQuestions, incorrectQuestions)
 					.orElseGet(() -> {
 						this.huntingModel.addReward(sessionId, correctQuestions.size() + incorrectQuestions.size());
 						return new NoMoreQuestions(2);
