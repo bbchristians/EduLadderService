@@ -10,7 +10,6 @@ import spark.Response;
 
 import static spark.Spark.*;
 
-import java.sql.SQLException;
 
 public class Main {
 

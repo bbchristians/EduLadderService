@@ -20,7 +20,7 @@ public class QuestionRelatednessGraph {
         this.nodesByQuestionId = new HashMap<>();
     }
 
-    public List<Question> getAllAppropriateQuestions(int gradeLevel) {
+    private List<Question> getAllAppropriateQuestions(int gradeLevel) {
         ArrayList<Question> questions = new ArrayList<>();
         // If grade level does not have any questions
         if( !this.nodesByGradeLevel.containsKey(gradeLevel) ) {
@@ -34,6 +34,9 @@ public class QuestionRelatednessGraph {
     }
 
     public List<Question> getAllAppropriateQuestions(int gradeLevel, List<Question> relatedToNodes) {
+        if( relatedToNodes.isEmpty() ) {
+            return getAllAppropriateQuestions(gradeLevel);
+        }
         ArrayList<Question> questions = new ArrayList<>();
         for( Question q : relatedToNodes ) {
             for( QuestionNode qNode : this.nodesByQuestionId.get(q.getQuestionId()).getRelatedNodes()) {
