@@ -6,6 +6,7 @@ import java.util.*;
 
 import model.FlushingModel;
 import model.HuntingModel;
+import model.graph.QuestionRelatednessGraph;
 import responses.NoMoreQuestions;
 import responses.Question;
 
@@ -20,15 +21,16 @@ public class EduLadderController {
 
 
 	public EduLadderController() {
-		this.huntingModel = new HuntingModel();
-		this.flushingModel = new FlushingModel();
-		this.sessionsFlushing = new HashSet<>();
 		try {
 			this.conn = DBConnection.getConnection();
+			QuestionRelatednessGraph.initializeInstance(DBConnection.getAllQuestions(), DBConnection.getAllRelations());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.huntingModel = new HuntingModel();
+		this.flushingModel = new FlushingModel();
+		this.sessionsFlushing = new HashSet<>();
 	}
 
 	public Question getQuestion(
@@ -53,10 +55,11 @@ public class EduLadderController {
 	}
 
 	public Question[] getRankableQuestions() {
-
-		// TODO 2 random questions from DB (This functionality won't be implemented...
-		// Alex is going to manually classify each question for the sake of the class
-		return new Question[] { new Question("123123", "5 + 5 = ?", new String[] { "10", "ten" }, ""),
-				new Question("123123", "5 + 5 = ?", new String[] { "10", "ten" }, "") };
+		try {
+			List<Question> rankableQuestions = DBConnection.getRankableQuestions();
+			return new Question[] { rankableQuestions.get(0), rankableQuestions.get(1) };
+		} catch (SQLException e) {
+			return new Question[0];
+		}
 	}
 }

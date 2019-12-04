@@ -27,7 +27,6 @@ public class FlushingModel extends QLearningModel {
 
     @Override
     public float getExploreChance() {
-        // Q learning vars
         return 0.05f;
     }
 

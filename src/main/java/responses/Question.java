@@ -6,11 +6,13 @@ public class Question {
 	private String questionText;
 	private String[] answers;
 	private String units;
+	private int gradeLevel;
 	
 	public Question(String questionId, String questionText, String answerString, String units) {
 		this.questionId = questionId;
 		this.questionText = questionText;
 		this.units = units;
+		this.gradeLevel = -1;
 		
 		String[] answerArray = answerString.split(",");
 		this.answers = new String[answerArray.length];
@@ -18,42 +20,41 @@ public class Question {
 			answers[i] = answerArray[i].trim();
 		}
 	}
-	
+
 	public Question(String questionId, String questionText, String[] answers, String units) {
 		this.questionId = questionId;
 		this.questionText = questionText;
 		this.answers = answers;
 		this.units = units;
+		this.gradeLevel = -1;
+	}
+
+	public Question(String questionId, String questionText, String[] answers, String units, int gradeLevel) {
+		this.questionId = questionId;
+		this.questionText = questionText;
+		this.answers = answers;
+		this.units = units;
+		this.gradeLevel = gradeLevel;
 	}
 	
 	public String getQuestionId() {
 		return questionId;
 	}
 
-	public void setQuestionId(String questionId) {
-		this.questionId = questionId;
-	}
-
 	public String getQuestionText() {
 		return questionText;
 	}
 
-	public void setQuestionText(String questionText) {
-		this.questionText = questionText;
-	}
+	public String getUnits() { return units; }
 
-	public String[] getAnswer() {
+	public String[] getAnswers() {
 		return answers;
 	}
 
-	public void setAnswer(String[] answers) {
-		this.answers = answers;
+	public int getGradeLevel() {
+		return gradeLevel;
 	}
 
-	public String getUnits() { return units; }
-
-	public void setUnits(String units) { this.units = units; }
-	
 	public static String[] parseAnswers(String answerString) {
 		
 		String[] answerArray = answerString.split(",");
