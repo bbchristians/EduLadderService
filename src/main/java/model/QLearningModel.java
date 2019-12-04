@@ -33,7 +33,7 @@ public abstract class QLearningModel {
         }
 
         // Get the best action from the Q-table
-        Question bestAction = this.getBestQuestion(state, validQuestions);
+        Question bestAction = this.getBestQuestionFromQTable(state, validQuestions);
 
         // Determine if the system should explore
         if( Math.random() < this.getExploreChance() ) {
@@ -62,7 +62,7 @@ public abstract class QLearningModel {
         return questionsFromGraph;
     }
 
-    private Question getBestQuestion(List<Question> curState, Set<Question> possibleActions) {
+    private Question getBestQuestionFromQTable(List<Question> curState, Set<Question> possibleActions) {
         // Find the best action given
         StateActionPair bestStateAction = null;
         for( Question questionCandidate : possibleActions ) {
@@ -87,10 +87,10 @@ public abstract class QLearningModel {
             float newQValue =
                     this.qLearningTable.get(saPair)
                             + this.getLearningRate() * (
-                            (1 / stepsToGoal) +
+                                    (1 / stepsToGoal) +
                                     (this.getDiscountRate() * getMaxNextState(saPair)) +
                                     this.qLearningTable.get(saPair)
-                    );
+                            );
             this.qLearningTable.put(saPair, newQValue);
         }
     }

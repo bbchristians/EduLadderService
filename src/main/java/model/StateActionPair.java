@@ -8,7 +8,7 @@ import java.util.List;
 
 public class StateActionPair {
 
-    private List<Question> state; // Incorrectly answered Qs
+    private List<Question> state;
     private Question action;
 
     public StateActionPair(List<Question> state, Question action) {
@@ -22,6 +22,15 @@ public class StateActionPair {
 
     public Question getAction() {
         return action;
+    }
+
+    @Override
+    public String toString() {
+        List<String> questionIds = new ArrayList<>();
+        for( Question q : this.state ) {
+            questionIds.add(q.getQuestionId());
+        }
+       return String.join(";", questionIds) + "|" + action.getQuestionId();
     }
 
     public static StateActionPair fromString(List<Question> questions, String str) {
