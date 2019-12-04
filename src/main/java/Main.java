@@ -20,22 +20,17 @@ public class Main {
     private static Gson gson = new Gson();
 
     public static void main(String[] args) {
-    	try {
-			controller = new EduLadderController();
+        controller = new EduLadderController();
 
-            after((Filter) (request, response) -> {
-                response.header("Access-Control-Allow-Origin", "*");
-                response.header("Access-Control-Allow-Methods", "GET,POST");
-            });
+        after((Filter) (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
+            response.header("Access-Control-Allow-Methods", "GET,POST");
+        });
 
-	        get("/getRankableQuestions", Main::getRankableQuestions);
-	        post("/getQuestion", Main::getQuestion);
-	        post("/submitRankings", Main::submitRankings);
-	        post("/submitAnswer", Main::submitAnswer);
-    	} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        get("/getRankableQuestions", Main::getRankableQuestions);
+        post("/getQuestion", Main::getQuestion);
+        post("/submitRankings", Main::submitRankings);
+        post("/submitAnswer", Main::submitAnswer);
     }
 
     private static String getQuestion(Request req, Response res) {
