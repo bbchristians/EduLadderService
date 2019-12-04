@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import controller.EduLadderController;
 import requests.GetQuestionRequest;
 import responses.GetQuestionResponse;
 import responses.GetRankableQuestionsResponse;
@@ -67,10 +68,13 @@ public class Main {
     }
 
     private static String submitRankings(Request req, Response res) {
+        // This does not need to be implemented for this project
         return "TODO";
     }
 
     private static String submitAnswer(Request req, Response res) {
+        // This does not need to be implemented for this project
+        // All question validation will be done on the front end.
         return "TODO";
     }
 }

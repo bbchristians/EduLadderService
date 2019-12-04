@@ -1,28 +1,28 @@
+package controller;
+
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import model.flushing.FlushingModel;
 import model.hunting.HuntingModel;
-import requests.AnsweredQuestions;
 import responses.NoMoreQuestions;
 import responses.Question;
 
 public class EduLadderController {
 
-	private DBConnection db = null;
 	private Connection conn = null;
-
 
 	private HuntingModel huntingModel;
 	private FlushingModel flushingModel;
 
+	private Set<String> sessionsFlushing;
 
-	public EduLadderController() throws SQLException {
+
+	public EduLadderController() {
 		this.huntingModel = new HuntingModel();
 		this.flushingModel = new FlushingModel();
+		this.sessionsFlushing = new HashSet<>();
 		try {
 			this.conn = DBConnection.getConnection();
 		} catch (SQLException e) {
@@ -34,10 +34,17 @@ public class EduLadderController {
 	public Question getQuestion(
 			String sessionId, int gradeLevel, List<Question> correctQuestions, List<Question> incorrectQuestions) {
 		if( incorrectQuestions.size() > 0 ) {
+			if( this.sessionsFlushing.remove(sessionId) ) {
+				this.flushingModel.addReward(sessionId, correctQuestions.size() + incorrectQuestions.size());
+			}
 			return this.huntingModel
 					.getBestAppropriateQuestion(sessionId, gradeLevel, correctQuestions, incorrectQuestions)
-					.orElseGet(() -> new NoMoreQuestions(2));
+					.orElseGet(() -> {
+						this.huntingModel.addReward(sessionId, correctQuestions.size() + incorrectQuestions.size());
+						return new NoMoreQuestions(2);
+					});
 		} else {
+			this.sessionsFlushing.add(sessionId);
 			return  this.flushingModel
 					.getNextQuestion(sessionId, gradeLevel, correctQuestions)
 					.orElseGet(() -> new NoMoreQuestions(1));
@@ -45,35 +52,10 @@ public class EduLadderController {
 	}
 
 	public Question[] getRankableQuestions() {
+
+		// TODO 2 random questions from DB (This functionality won't be implemented...
+		// Alex is going to manually classify each question for the sake of the class
 		return new Question[] { new Question("123123", "5 + 5 = ?", new String[] { "10", "ten" }, ""),
 				new Question("123123", "5 + 5 = ?", new String[] { "10", "ten" }, "") };
-	}
-
-	public Question getQuestion(String sessionId) {
-
-		try {
-			List<Integer> answeredQuestionIds = db.getAnsweredQuestions(sessionId);
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-	public boolean answerQuestion(String sessionId, String questionId, String answer) {
-		try {
-			return db.answerQuestion(sessionId, questionId, answer);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return false;
-	}
-
-	public void classifyQuestions(int questionId1, int questionId2, int relationScore, int complexity) {
-	
 	}
 }
