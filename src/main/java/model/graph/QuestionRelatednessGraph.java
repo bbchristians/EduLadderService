@@ -3,6 +3,7 @@ package model.graph;
 import responses.Question;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,10 +16,17 @@ public class QuestionRelatednessGraph {
 
     private QuestionRelatednessGraph() {
         // TODO what question Data do we have?
+        this.nodesByGradeLevel = new HashMap<>();
+        this.nodesByQuestionId = new HashMap<>();
     }
 
     public List<Question> getAllAppropriateQuestions(int gradeLevel) {
         ArrayList<Question> questions = new ArrayList<>();
+        // If grade level does not have any questions
+        if( !this.nodesByGradeLevel.containsKey(gradeLevel) ) {
+            return questions;
+        }
+        // If grade level does have questions
         for( QuestionNode questionNode : this.nodesByGradeLevel.get(gradeLevel) ) {
             questions.add(questionNode.getQuestion());
         }

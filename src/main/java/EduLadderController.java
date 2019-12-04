@@ -2,16 +2,27 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
+import model.flushing.FlushingModel;
+import model.hunting.HuntingModel;
+import requests.AnsweredQuestions;
+import responses.NoMoreQuestions;
 import responses.Question;
 
 public class EduLadderController {
 
 	private DBConnection db = null;
-	Connection conn = null;
-	private HashMap<Integer,HashMap<Integer, Double>> complexityGraph = new HashMap<>();
+	private Connection conn = null;
+
+
+	private HuntingModel huntingModel;
+	private FlushingModel flushingModel;
+
 
 	public EduLadderController() throws SQLException {
+		this.huntingModel = new HuntingModel();
+		this.flushingModel = new FlushingModel();
 		try {
 			this.conn = DBConnection.getConnection();
 		} catch (SQLException e) {
@@ -20,8 +31,17 @@ public class EduLadderController {
 		}
 	}
 
-	public Question getQuestion(String sessionId, int gradeLevel) {
-		return new Question("123123", "5 + 5 = ?", new String[] { "10", "ten" }, "");
+	public Question getQuestion(
+			String sessionId, int gradeLevel, List<Question> correctQuestions, List<Question> incorrectQuestions) {
+		if( incorrectQuestions.size() > 0 ) {
+			return this.huntingModel
+					.getBestAppropriateQuestion(sessionId, gradeLevel, correctQuestions, incorrectQuestions)
+					.orElseGet(() -> new NoMoreQuestions(2));
+		} else {
+			return  this.flushingModel
+					.getNextQuestion(sessionId, gradeLevel, correctQuestions)
+					.orElseGet(() -> new NoMoreQuestions(1));
+		}
 	}
 
 	public Question[] getRankableQuestions() {

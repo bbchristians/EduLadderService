@@ -1,5 +1,6 @@
 package model.flushing;
 
+import com.google.common.collect.Lists;
 import model.graph.QuestionRelatednessGraph;
 import responses.Question;
 
@@ -9,13 +10,13 @@ public class FlushingModel {
 
     private Map<FlushingStateActionPair, Float> qLearningTable;
 
-
+    // Q learning vars
     private float exploreChance = 0.05f;
     private float learningRate = 0.5f;
     private float discountRate = 0.4f;
 
-
     private QuestionRelatednessGraph graph;
+    // Cache of session paths
     private Map<String, List<FlushingStateActionPair>> pairsBySession;
 
     public FlushingModel() {
@@ -76,22 +77,27 @@ public class FlushingModel {
     }
 
     public void addReward(String sessionId, int stepsToGoal) {
-        for( FlushingStateActionPair saPair : this.pairsBySession.get(sessionId) ) {
-            this.qLearningTable.get(saPair) =
+        for( FlushingStateActionPair saPair : Lists.reverse(this.pairsBySession.get(sessionId)) ) {
+            float newQValue =
                     this.qLearningTable.get(saPair)
-                            + this.learningRate(
-                                    1 / stepsToGoal,
-                                    discountRate * (
-
-                                            )
-                                    )
+                    + this.learningRate * (
+                            (1 / stepsToGoal) +
+                            (discountRate * getMaxNextState(saPair)) +
+                            this.qLearningTable.get(saPair)
+                    );
+            this.qLearningTable.put(saPair, newQValue);
         }
     }
 
     private float getMaxNextState(FlushingStateActionPair saPair) {
-        List<Question> destinedState =
+        List<Question> destinedState = new ArrayList<>(saPair.getState());
+        destinedState.add(saPair.getAction());
+        float nextReward = 0f;
         for( FlushingStateActionPair tablePair : this.qLearningTable.keySet() ) {
-
+            if( tablePair.getState().equals(destinedState) ) {
+                nextReward = Math.max(nextReward, this.qLearningTable.get(tablePair));
+            }
         }
+        return nextReward;
     }
 }

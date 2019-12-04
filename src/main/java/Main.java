@@ -43,7 +43,10 @@ public class Main {
                 gson.toJson(
                         new GetQuestionResponse(
                                 controller.getQuestion(
-                                        reqBody.sessionId, reqBody.gradeLevel
+                                        reqBody.getSessionId(),
+                                        reqBody.getGradeLevel(),
+                                        reqBody.getAnsweredQuestions().getCorrectQuestions(),
+                                        reqBody.getAnsweredQuestions().getIncorrectQuestions()
                                 )
                         )
                 )
