@@ -76,5 +76,17 @@ public class Question {
 				
 		return questionString;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if( obj instanceof Question ) {
+			return this.getQuestionId().equals(((Question)obj).getQuestionId());
+		} return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return this.questionId.hashCode();
+	}
 }
 

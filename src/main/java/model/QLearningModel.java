@@ -84,12 +84,13 @@ public abstract class QLearningModel {
 
     public void addReward(String sessionId, int stepsToGoal) {
         for( StateActionPair saPair : Lists.reverse(this.pairsBySession.get(sessionId)) ) {
+            float oldQValue = this.qLearningTable.getOrDefault(saPair, 0f);
             float newQValue =
-                    this.qLearningTable.get(saPair)
+                    oldQValue
                             + this.getLearningRate() * (
                                     (1 / stepsToGoal) +
                                     (this.getDiscountRate() * getMaxNextState(saPair)) +
-                                    this.qLearningTable.get(saPair)
+                                    oldQValue
                             );
             this.qLearningTable.put(saPair, newQValue);
         }
