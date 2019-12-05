@@ -8,11 +8,11 @@ public class Question {
 	private String units;
 	private int gradeLevel;
 	
-	public Question(String questionId, String questionText, String answerString, String units) {
+	public Question(String questionId, int gradeLevel, String questionText, String answerString, String units) {
 		this.questionId = questionId;
 		this.questionText = questionText;
 		this.units = units;
-		this.gradeLevel = -1;
+		this.gradeLevel = gradeLevel;
 		
 		String[] answerArray = answerString.split(",");
 		this.answers = new String[answerArray.length];

@@ -62,12 +62,14 @@ public class DBConnection {
 		Collections.shuffle(questionList);
 		return questionList;
 	}
-
+	
 	static List<Question> getAllQuestions() throws SQLException{
-		String query = "SELECT q.question_id, q.text, qa.answer_text"
+		String query = "SELECT q.question_id, g.grade_level, q.text, qa.answer_text"
 				+ " FROM questions q"
 				+ " INNER JOIN question_answers qa"
-				+ " ON qa.question_id = q.question_id";
+				+ " ON qa.question_id = q.question_id"
+				+ " INNER JOIN grades g"
+				+ " ON g.grade_id = CAST(q.grade_id AS int4)";
 		Connection conn = getConnection();
 		PreparedStatement stmt = conn.prepareStatement(query);
 		ResultSet rs = stmt.executeQuery();
@@ -77,17 +79,23 @@ public class DBConnection {
 			questionList.add(
 					new Question(
 							rs.getString(1),
-							rs.getString(2),
+							rs.getInt(2),
 							rs.getString(3),
+							rs.getString(4),
 							""));
 					// TODO this needs to include grade level
 		}
 
 		return questionList;
 	}
-
+	
 	static List<QuestionRelation> getAllRelations() throws SQLException {
 		// TODO
+		String query = "SELECT q1.question_id, rd.question_id2, rd.relationship_score" + 
+				" FROM questions q1" + 
+				" INNER JOIN related_diffs rd" + 
+				" ON rd.question_id1 = q1.question_id";
+		
 		return new ArrayList<>();
 	}
 
