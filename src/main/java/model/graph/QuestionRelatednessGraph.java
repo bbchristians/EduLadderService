@@ -73,8 +73,8 @@ public class QuestionRelatednessGraph {
                 if( !curQuestion.equals(curRelatedQuestion) ) {
                     for( QuestionRelation rel : relations ) {
                         if( rel.getRelatednessScore() >= RELATEDNESS_THRESHOLD &&
-                                rel.getQ1().equals(curQuestion) &&
-                                rel.getQ2().equals(curRelatedQuestion) ) {
+                                rel.getQ1().equals(curQuestion.getQuestionId()) &&
+                                rel.getQ2().equals(curRelatedQuestion.getQuestionId()) ) {
                             curNode.getRelatedNodes().add(generateOrFindNode(curRelatedQuestion, generatedNodes));
                         }
                     }

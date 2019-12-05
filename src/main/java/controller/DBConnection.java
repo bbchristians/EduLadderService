@@ -95,8 +95,20 @@ public class DBConnection {
 				" FROM questions q1" + 
 				" INNER JOIN related_diffs rd" + 
 				" ON rd.question_id1 = q1.question_id";
+		Connection conn = getConnection();
+		PreparedStatement stmt = conn.prepareStatement(query);
+		ResultSet rs = stmt.executeQuery();
+
+		List<QuestionRelation> relations = new ArrayList<>();
+		while(rs.next()) {
+			relations.add(
+					new QuestionRelation(
+							rs.getString(1),
+							rs.getString(2),
+							rs.getFloat(3)));
+		}
 		
-		return new ArrayList<>();
+		return relations;
 	}
 
 
