@@ -51,7 +51,6 @@ public class EduLadderController {
 					.getNextQuestion(sessionId, gradeLevel, correctQuestions)
 					.orElseGet(() -> new NoMoreQuestions(1));
 		}
-//		return new Question("123123", "5 + 5 = ?", new String[] { "10", "ten" }, "");
 	}
 
 	public Question[] getRankableQuestions() {

@@ -59,6 +59,7 @@ public abstract class QLearningModel {
         Set<Question> questionsFromGraph = new HashSet<>(
                 this.graph.getAllAppropriateQuestions(gradeLevel, incorrectQuestions));
         questionsFromGraph.removeAll(answeredQuestions);
+        questionsFromGraph.removeAll(incorrectQuestions);
         return questionsFromGraph;
     }
 
@@ -88,7 +89,7 @@ public abstract class QLearningModel {
             float newQValue =
                     oldQValue
                             + this.getLearningRate() * (
-                                    (1 / stepsToGoal) +
+                                    (1.0f / stepsToGoal) +
                                     (this.getDiscountRate() * getMaxNextState(saPair)) +
                                     oldQValue
                             );

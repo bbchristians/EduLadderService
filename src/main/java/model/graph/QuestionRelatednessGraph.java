@@ -42,7 +42,7 @@ public class QuestionRelatednessGraph {
         ArrayList<Question> questions = new ArrayList<>();
         for( Question q : relatedToNodes ) {
             for( QuestionNode qNode : this.nodesByQuestionId.get(q.getQuestionId()).getRelatedNodes()) {
-                if( qNode.getGradeLevel() >= gradeLevel ) {
+                if( qNode.getGradeLevel() <= gradeLevel ) {
                     questions.add(qNode.getQuestion());
                 }
             }
